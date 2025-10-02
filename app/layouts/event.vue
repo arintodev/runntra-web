@@ -1,9 +1,15 @@
 <template>
   <NuxtLayout name="organizer">
-    <template #sidebarMenu="{ collapsed }">
-      <UNavigationMenu :tooltip="true" :collapsed="collapsed" :items="items" orientation="vertical" />
-      <USeparator />
-      <UNavigationMenu :tooltip="true" :collapsed="collapsed" :items="settingMenus" orientation="vertical" />
+    <template #sidebar>
+      <slot name="sidebar">
+        <UDashboardSidebar mode="drawer" :collapsed="true">
+          <template #default="{collapsed}">
+            <UNavigationMenu :tooltip="true" :collapsed="collapsed" :items="items" orientation="vertical" />
+            <USeparator />
+            <UNavigationMenu :tooltip="true" :collapsed="collapsed" :items="settingMenus" orientation="vertical" />
+          </template>
+        </UDashboardSidebar>
+      </slot>
     </template>
     <slot />
   </NuxtLayout>

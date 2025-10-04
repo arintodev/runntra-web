@@ -50,7 +50,7 @@ import { z } from 'zod/v4'
 const { copy, copied } = useClipboard()
 
 definePageMeta({
-	layout: 'event'
+	layout: 'organizer'
 })
 
 const schema = z.object({

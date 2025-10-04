@@ -10,27 +10,16 @@
 						<UInput icon="i-lucide-search" size="sm" variant="outline" placeholder="Search..." />
 					</div>
 					<div class="flex justify-end">
-						<UButton icon="i-lucide-plus" size="sm" label="New Organizer" />
+						<UButton to="/organizers/new" icon="i-lucide-plus" size="sm" label="New Organizer" />
 					</div>
 				</div>
 				<div>
 					<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-						<ULink :to="`/org/asdfjjkl`">
+						<ULink v-for="item in organizers" :to="`/organizers/${item.id}`">
 							<UCard>
-								<h3 class="text-highlighted">Siksorogo</h3>
+								<h3 class="text-highlighted">{{ item.name }}</h3>
 								<div class="mt-3 flex justify-between items-center">
-									<div class="text-sm">2 events</div>
-									<div>
-										<UButton icon="i-lucide-arrow-right" variant="ghost" />
-									</div>
-								</div>
-							</UCard>
-						</ULink>
-						<ULink :to="`/org/asdfjjkl`">
-							<UCard>
-								<h3 class="text-highlighted">Konco Lari</h3>
-								<div class="mt-3 flex justify-between items-center">
-									<div class="text-sm">1 events</div>
+									<div class="text-sm">{{ item.event_count }} events</div>
 									<div>
 										<UButton icon="i-lucide-arrow-right" variant="ghost" />
 									</div>
@@ -45,6 +34,19 @@
 </template>
 <script setup lang="ts">
 const route = useRoute();
+
+const organizers = ref([
+	{
+		id: '1',
+		name: 'Siksorogo',
+		event_count: 2
+	},
+	{
+		id: '2',
+		name: 'Konco Lari',
+		event_count: 1
+	}
+])
 
 definePageMeta({
 	layout: 'dashboard'

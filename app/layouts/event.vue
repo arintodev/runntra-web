@@ -19,13 +19,18 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 
 const route = useRoute()
 
-const path = `/org/${route.params.orgId}/event/${route.params.eventId}`
+const path = `/organizers/${route.params.orgId}/event/${route.params.eventId}`
 
 const items: NavigationMenuItem[] = [
   {
     label: 'Overview',
     icon: 'i-lucide-home',
     to: `${path}`
+  },
+  {
+    label: 'Races',
+    icon: 'i-lucide-medal',
+    to: `${path}/races`
   },
   {
     label: 'Participants',

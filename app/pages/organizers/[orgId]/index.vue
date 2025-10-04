@@ -15,7 +15,7 @@
 				</div>
 				<div>
 					<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-						<ULink :to="`/org/${route.params.orgId}/event/asdfjkl`">
+						<ULink :to="`/organizers/${route.params.orgId}/event/asdfjkl`">
 							<UCard>
 								<h3 class="text-highlighted">Siksorogo Lawu Ultra 2025</h3>
 								<div class="text-sm text-dimmed">25 Jun 2025</div>
@@ -27,7 +27,7 @@
 								</div>
 							</UCard>
 						</ULink>
-						<ULink :to="`/org/${route.params.orgId}/event/asdfjkl`">
+						<ULink :to="`/organizers/${route.params.orgId}/event/asdfjkl`">
 							<UCard>
 								<h3 class="text-highlighted">Siksorogo Ring of Lawu 2025</h3>
 								<div class="text-sm text-dimmed">25 Jun 2025</div>

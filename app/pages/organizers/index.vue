@@ -33,23 +33,14 @@
 	</div>
 </template>
 <script setup lang="ts">
-const route = useRoute();
-
-const organizers = ref([
-	{
-		id: '1',
-		name: 'Siksorogo',
-		event_count: 2
-	},
-	{
-		id: '2',
-		name: 'Konco Lari',
-		event_count: 1
-	}
-])
 
 definePageMeta({
 	layout: 'dashboard'
 })
 
+const { organizers, isLoading: isLoadingOrg, fetchOrganizers } = useOrganizers()
+
+onMounted(() => {
+	fetchOrganizers()
+})
 </script>

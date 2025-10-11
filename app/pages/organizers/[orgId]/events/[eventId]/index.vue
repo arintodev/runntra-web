@@ -2,7 +2,7 @@
 	<div class="w-full min-h-full flex flex-col items-stretch">
 		<UContainer class="py-14">
 			<div>
-				<h2 class="text-2xl text-highlighted">Siksorogo Lawu Ultra 2025</h2>
+				<h2 class="text-2xl text-highlighted">{{ event?.name }}</h2>
 			</div>
 		</UContainer>
 		<USeparator />
@@ -12,5 +12,7 @@
 definePageMeta({
 	layout: 'event'
 })
+
+const { event } = useEventDetailStore();
 
 </script>

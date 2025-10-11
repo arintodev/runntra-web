@@ -10,29 +10,17 @@
 						<UInput icon="i-lucide-search" size="sm" variant="outline" placeholder="Search..." />
 					</div>
 					<div class="flex justify-end">
-						<UButton icon="i-lucide-plus" size="sm" label="New event" />
+						<UButton :to="`/organizers/${route.params.orgId}/events/new`" icon="i-lucide-plus" size="sm" label="New event" />
 					</div>
 				</div>
 				<div>
 					<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-						<ULink :to="`/organizers/${route.params.orgId}/event/asdfjkl`">
+						<ULink v-for="item in events" :to="`/organizers/${route.params.orgId}/events/${item.id}`">
 							<UCard>
-								<h3 class="text-highlighted">Siksorogo Lawu Ultra 2025</h3>
+								<h3 class="text-highlighted">{{ item.name }}</h3>
 								<div class="text-sm text-dimmed">25 Jun 2025</div>
 								<div class="mt-3 flex justify-between items-center">
 									<div class="text-sm">Archived</div>
-									<div>
-										<UButton icon="i-lucide-arrow-right" variant="ghost" />
-									</div>
-								</div>
-							</UCard>
-						</ULink>
-						<ULink :to="`/organizers/${route.params.orgId}/event/asdfjkl`">
-							<UCard>
-								<h3 class="text-highlighted">Siksorogo Ring of Lawu 2025</h3>
-								<div class="text-sm text-dimmed">25 Jun 2025</div>
-								<div class="mt-3 flex justify-between items-center">
-									<div class="text-sm">On going</div>
 									<div>
 										<UButton icon="i-lucide-arrow-right" variant="ghost" />
 									</div>
@@ -47,6 +35,14 @@
 </template>
 <script setup lang="ts">
 const route = useRoute();
+
+const { events, fetchEvents } = useOrganizerEvents()
+
+onMounted(() => {
+	fetchEvents({
+		orgId: route.params.orgId as string
+	})
+})
 
 definePageMeta({
 	layout: 'organizer'

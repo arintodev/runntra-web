@@ -3,7 +3,9 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 import { z } from 'zod/v4';
 
 const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 const toast = useToast();
+const router = useRouter();
 
 const fields = ref([
   {
@@ -40,8 +42,17 @@ async function signInWithEmail(payload: FormSubmitEvent<Schema>) {
       description: error.message,
       color: "error"
     })
+    return
   }
+
+  router.replace('/');
 }
+
+onMounted(() => {
+  if (user) {
+    router.replace('/');
+  }
+})
 
 </script>
 

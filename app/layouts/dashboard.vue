@@ -10,6 +10,7 @@
                 </template>
                 <template #right>
                     <div class="flex items-center justifiy-end gap-2">
+                        <UColorModeButton />
                         <AppUser />
                     </div>
                 </template>

@@ -1,23 +1,55 @@
-
 <template>
   <div>
-    <div class="flex justify-between p-4">
-      <div class="flex">
-        <UInput icon="i-lucide-search" size="sm" variant="outline" placeholder="Search..." />
-      </div>
-      <div class="flex justify-end">
-        <UButton icon="i-lucide-file-spreadsheet" size="sm" label="Import" />
+    <div class="flex h-full flex-col items-stretch">
+      <div class="border-b border-default">
+        <div class="flex items-stretch">
+          <div class="py-4 px-6 border-r border-default w-auto md:w-64">Participants</div>
+          <div class="px-6 flex items-center justify-between">
+            <div class="flex gap-2 items-center text-success hidden">
+              <UIcon name="i-lucide-plus" />
+              <span>Category</span>
+            </div>
+            <div class="flex gap-2 items-center text-success">
+              <div>
+                30K
+              </div>
+              <UPopover :content="{ side: 'bottom' }">
+                <UButton icon="i-lucide-chevrons-up-down" color="neutral" variant="ghost" size="sm" />
+                <template #content>
+                  <UCommandPalette v-model="category" placeholder="Search..."
+                    :groups="[{ id: 'categories', items: categories }]"
+                    :ui="{ input: '[&>input]:h-8 [&>input]:text-sm' }">
+                    <template #footer>
+                      <UButton :to="`${path}/races/new`" label="New race" block variant="soft" color="neutral" size="sm"
+                        icon="i-lucide-plus" />
+                    </template>
+                  </UCommandPalette>
+                </template>
+              </UPopover>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="flex-1">
-      <UTable :data="data" :columns="columns" class="flex-1 max-h-full" />
+    <div class="flex-1 w-full overflow-y-auto">
+      <div class="flex justify-between p-4">
+        <div class="flex">
+          <UInput icon="i-lucide-search" size="sm" variant="outline" placeholder="Search..." />
+        </div>
+        <div class="flex justify-end">
+          <UButton icon="i-lucide-file-spreadsheet" size="sm" label="Import" />
+        </div>
+      </div>
+      <div class="flex-1">
+        <UTable :data="data" :columns="columns" class="flex-1 max-h-full" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: 'event-participant'
+  layout: 'event'
 })
 
 import { h, resolveComponent } from 'vue'
@@ -188,4 +220,21 @@ function getRowItems(row: Row<Payment>) {
     }
   ]
 }
+
+const category = ref([])
+
+const categories = ref([
+    {
+        label: '30K',
+        value: '1',
+    },
+    {
+        label: '50K',
+        value: '2',
+    },
+    {
+        label: '80K',
+        value: '3',
+    }
+])
 </script>

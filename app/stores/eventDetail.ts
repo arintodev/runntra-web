@@ -37,12 +37,6 @@ export const useEventDetailStore = defineStore('eventDetail', {
       }
     },
 
-    // Get event status for UI display
-    eventStatus: (state): string | null => {
-      if (!state.event) return null
-      return state.event.status
-    },
-
     // Check if event can be edited (not completed or cancelled)
     isEditable: (state): boolean => {
       if (!state.event) return false
@@ -83,45 +77,6 @@ export const useEventDetailStore = defineStore('eventDetail', {
         toast.add({
           color: 'error',
           title: 'Fetch event failed',
-          description: e.message
-        })
-      } finally {
-        this.isLoading = false
-      }
-    },
-
-    async updateEventStatus(status: Event['status']) {
-      if (!this.event) return
-
-      const supabase = useSupabaseClient()
-      this.isLoading = true
-      this.error = null
-
-      try {
-        const { data, error: supabaseError } = await supabase
-          .from('events')
-          .update({ status, updated_at: new Date().toISOString() })
-          .eq('id', this.event.id)
-          .select()
-          .single()
-
-        if (supabaseError) {
-          throw supabaseError
-        }
-
-        this.event = data
-        const toast = useToast()
-        toast.add({
-          color: 'success',
-          title: 'Event status updated',
-          description: `Event status changed to ${status}`
-        })
-      } catch (e: any) {
-        this.error = e.message
-        const toast = useToast()
-        toast.add({
-          color: 'error',
-          title: 'Update event status failed',
           description: e.message
         })
       } finally {

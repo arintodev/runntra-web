@@ -6,7 +6,9 @@ interface EventRace {
     race_type: string
     distance: number | null
     elevation: number | null
-    loops: number | null
+    loop_target: string | null
+    loop_duration: number | null
+    loop_count: number | null
     segments: number | null
     event_id: string
     created_at: string
@@ -30,7 +32,7 @@ export const useEventRaceStore = defineStore('eventRace', {
 
     getters: {
         raceById: (state) => (id: string) => state.eventRaces.find((race: EventRace) => race.id === id),
-        
+
         // Group races by type for display
         racesByType: (state) => {
             const grouped = state.eventRaces.reduce((acc: Record<string, EventRace[]>, race: EventRace) => {
@@ -58,8 +60,8 @@ export const useEventRaceStore = defineStore('eventRace', {
 
             try {
                 const { data, error: supabaseError } = await supabase
-                    .from('races')
-                    .select('*')
+                    .from('event_races')
+                    .select('*, race_checkpoints(*)')
                     .eq('event_id', eventId)
                     .order('created_at', { ascending: true })
 
@@ -88,7 +90,7 @@ export const useEventRaceStore = defineStore('eventRace', {
 
             try {
                 const { data, error: supabaseError } = await supabase
-                    .from('races')
+                    .from('event_races')
                     .select('*')
                     .eq('id', raceId)
                     .single()
@@ -113,19 +115,16 @@ export const useEventRaceStore = defineStore('eventRace', {
             }
         },
 
-        async createEventRace(race: { name: string, race_type: string, distance: number | null, elevation: number | null, loops: number | null, segments: number | null, event_id: string }) {
+        async createEventRace(race: any) {
             const supabase = useSupabaseClient<any>()
             this.isLoading = true
             this.error = null
 
             try {
-                const timestamp = new Date().toISOString()
                 const { data, error: supabaseError } = await supabase
-                    .from('races')
+                    .from('event_races')
                     .insert({
                         ...race,
-                        created_at: timestamp,
-                        updated_at: timestamp
                     })
                     .select()
                     .single()
@@ -157,32 +156,21 @@ export const useEventRaceStore = defineStore('eventRace', {
             }
         },
 
-        async updateEventRace(raceId: string, updates: { name?: string, race_type?: string, distance?: number | null, elevation?: number | null, loops?: number | null, segments?: number | null, event_id?: string }) {
+        async updateEventRace(raceId: string, updates: any) {
             const supabase = useSupabaseClient<any>()
             this.isLoading = true
             this.error = null
 
             try {
                 const { data, error: supabaseError } = await supabase
-                    .from('races')
+                    .from('event_races')
                     .update({
                         ...updates,
-                        updated_at: new Date().toISOString()
                     })
                     .eq('id', raceId)
-                    .select()
-                    .single()
 
                 if (supabaseError) {
                     throw supabaseError
-                }
-
-                const index = this.eventRaces.findIndex((r: EventRace) => r.id === raceId)
-                if (index !== -1) {
-                    this.eventRaces[index] = data
-                }
-                if (this.currentRace?.id === raceId) {
-                    this.currentRace = data
                 }
 
                 const toast = useToast()
@@ -214,7 +202,7 @@ export const useEventRaceStore = defineStore('eventRace', {
 
             try {
                 const { error: supabaseError } = await supabase
-                    .from('races')
+                    .from('event_races')
                     .delete()
                     .eq('id', raceId)
 

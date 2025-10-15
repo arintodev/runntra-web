@@ -13,7 +13,7 @@
                 </div>
                 <UModal :dismissible="false" v-model:open="isNewRaceModalOpen" title="Create new race race" description="create a new race">
                     <template #content>
-                        <RaceForm :event-id="eventId" @created="onRaceCreated" @cancel="isNewRaceModalOpen = false" />
+                        <RaceForm :event-id="eventId" @created="onRaceCreated" @cancel="isNewRaceModalOpen = false" @save="onSave" />
                     </template>
                 </UModal>
                 <div>
@@ -55,14 +55,16 @@ const isNewRaceModalOpen = ref(false)
 
 const races = computed(() => eventRaceStore.eventRaces)
 
-// Load races when component mounts
-onMounted(async () => {
-    await eventRaceStore.fetchEventRaces(eventId.value)
-})
-
 // Handle new race creation
 const onRaceCreated = async () => {
     isNewRaceModalOpen.value = false
     await eventRaceStore.fetchEventRaces(eventId.value)
 }
+
+const onSave = async (data: any) => {
+    await eventRaceStore.createEventRace({
+        ...data,
+        event_id: eventId.value
+    })
+} 
 </script>

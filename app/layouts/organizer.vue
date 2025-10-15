@@ -20,10 +20,11 @@
           </ULink>
         </div>
         <div>
-          <UPopover :content="{ side: 'bottom', align: 'start' }">
-            <UButton icon="i-lucide-chevrons-up-down" color="neutral" variant="ghost" size="sm" />
+          <UPopover v-model:open="open" :content="{ side: 'bottom', align: 'start' }">
+            <UButton icon="i-lucide-chevrons-up-down" color="neutral" variant="ghost" size="sm" @click="open = true" />
             <template #content>
               <UCommandPalette v-model="organizer" placeholder="Search..."
+                @update:modelValue="handleSelection"
                 :groups="[{ id: 'organizers', items: organizerItems }]"
                 :ui="{ input: '[&>input]:h-8 [&>input]:text-sm' }">
                 <template #footer>
@@ -46,9 +47,11 @@ import { storeToRefs } from 'pinia'
 import { useOrganizerStore } from '~/stores/organizer'
 
 const route = useRoute()
+const router = useRouter()
 const organizerStore = useOrganizerStore()
 const { organizerItems } = storeToRefs(organizerStore)
 const organizer = ref<CommandPaletteItem | null>(null)
+const open = ref(false)
 
 watchEffect(() => {
   const activeOrg = organizerItems.value.find(org => org.value === route.params.orgId)
@@ -58,6 +61,17 @@ watchEffect(() => {
     organizer.value = organizerItems.value[0] || null
   }
 })
+
+const handleSelection = (selected: CommandPaletteItem | null) => {
+  if (selected) {
+    const orgId = selected.value
+    if (orgId && typeof orgId === 'string') {
+      const path = `/organizers/${orgId}`
+      router.push(path)
+    }
+    open.value = false
+  }
+}
 
 const items: NavigationMenuItem[] = [
   {
@@ -94,6 +108,7 @@ const events = ref([
 const event = ref([])
 
 onMounted(() => {
+  console.log('Mounted layout organizer with orgId:', route.params.orgId);
   organizerStore.fetchOrganizers()
 })
 

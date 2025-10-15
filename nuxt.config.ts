@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/supabase',
     '@pinia/nuxt',
+    '@nuxtjs/leaflet',
   ],
 
   devtools: {

@@ -1,22 +1,17 @@
 <template>
-  <UContainer class="pt-8">
-			<div>
-				<div class="flex justify-between mb-4">
-					<div></div>
-					<div class="flex justify-end">
-						<UButton size="sm" icon="i-lucide-plus" label="New category" />
-					</div>
-				</div>
-				<div class="border border-muted rounded-md">
-					<UTable :data="categories" :columns="columns" class="flex-1" @select="onSelect" />
-				</div>
+	<div>
+		<div class="flex justify-between mb-4">
+			<div></div>
+			<div class="flex justify-end">
+				<UButton size="sm" icon="i-lucide-plus" label="New category" />
 			</div>
-		</UContainer>
+		</div>
+		<div class="border border-muted rounded-md">
+			<UTable :data="categories" :columns="columns" class="flex-1" @select="onSelect" />
+		</div>
+	</div>
 </template>
 <script setup lang="ts">
-definePageMeta({
-	layout: 'event-settings'
-})
 
 import type { TableColumn, TableRow } from '@nuxt/ui'
 

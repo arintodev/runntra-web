@@ -1,10 +1,10 @@
 <template>
   <div role="group" class="flex gap-4 flex-col w-full">
     <div class="flex">
-      <div v-for="(item, index) in items" :key="index" class="group text-center relative w-full"
+      <div v-for="(item, index) in items" :key="index" class="group text-center relative w-full min-w-54"
         :data-state="item.active ? 'active' : 'inactive'" :data-disabled="item.disabled">
         <div class="relative flex justify-center">
-          <UButton :icon="item.icon" size="lg" :variant="item.active ? 'solid' : 'subtle'"
+          <UButton :icon="item.icon" size="lg" variant="subtle"
             :color="item.active ? 'primary' : 'neutral'" :disabled="item.disabled" class="rounded-full aspect-square"
             @click="handleStepClick(index)">
             <template v-if="!item.icon">

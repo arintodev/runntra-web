@@ -36,6 +36,7 @@ import { z } from 'zod/v4';
 const router = useRouter();
 const supabase = useSupabaseClient();
 const toast = useToast();
+const organizerStore = useOrganizerStore()
 
 const schema = z.object({
   name: z.string().min(3),
@@ -56,18 +57,7 @@ function cancel() {
 }
 
 async function createOrganizer(payload: FormSubmitEvent<Schema>) {
-    const { error } = await supabase.rpc('create_organizer_with_user', {
-        name: payload.data.name
-    } as any)
-
-    if (error) {
-        toast.add({
-            color: 'error',
-            title: 'Create organizer failed',
-        });
-
-        return;
-    } 
+    await organizerStore.createOrganization(payload.data)
 
     if (window.history.length > 1) {
         router.back()

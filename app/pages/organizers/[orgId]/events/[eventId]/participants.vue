@@ -37,19 +37,33 @@
           <UInput icon="i-lucide-search" size="sm" variant="outline" placeholder="Search..." />
         </div>
         <div class="flex justify-end">
-          <UButton icon="i-lucide-file-spreadsheet" size="sm" label="Import" />
+          <UButton icon="i-lucide-file-spreadsheet" size="sm" label="Import" @click="importOpen = true" />
         </div>
       </div>
       <div class="flex-1">
         <UTable :data="data" :columns="columns" class="flex-1 max-h-full" />
       </div>
     </div>
+    <UModal v-model:open="importOpen" :dismissible="false" title="Import participant">
+      <template #body>
+        <div>
+          <UFileUpload v-model="importFile" accept=".csv" color="primary" highlight label="Import your data here"
+            description="CSV (max. 1MB)" class="w-full" />
+        </div>
+      </template>
+      <template #footer>
+        <div class="flex justify-end gap-2 w-full">
+          <UButton size="sm" label="Cancel" color="neutral" variant="outline" @click="closeImport" />
+          <UButton size="sm" label="Save" @click="uploadImport" />
+        </div>
+      </template>
+    </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: 'event'
+  layout: 'organizer'
 })
 
 import { h, resolveComponent } from 'vue'
@@ -61,8 +75,61 @@ const UButton = resolveComponent('UButton')
 const UBadge = resolveComponent('UBadge')
 const UDropdownMenu = resolveComponent('UDropdownMenu')
 
+const route = useRoute()
 const toast = useToast()
 const { copy } = useClipboard()
+const importOpen = ref(false)
+const sb = useSupabaseClient()
+const importFile = ref<File | null>(null)
+
+
+async function uploadImport() {
+  const file = importFile.value
+  if (!file) return
+  
+  const { orgId, eventId } = route.params
+  const filePath = `${orgId}/${eventId}/imports/${Date.now()}-${file.name}`
+
+  const { error } = await sb.storage
+    .from('data-transfer')
+    .upload(filePath, file, {
+      cacheControl: 'no-cache',
+      upsert: false,
+      contentType: 'text/csv',
+    })
+  
+  if (error) {
+    toast.add({
+      color: "error",
+      title: "Upload import file failed",
+      description: error.message
+    })
+    return
+  }
+
+  const { data, error: fnError } = await sb.functions.invoke('participant-import', {
+    body: { orgId, eventId, path: filePath },
+  })
+
+  if (fnError) {
+    toast.add({
+      color: "error",
+      title: "Upload import file failed",
+      description: fnError.message
+    })
+    return;
+  }
+
+  toast.add({
+    color: "success",
+    title: "Import participant ",
+    description: fnError.message
+  })
+}
+
+function closeImport() {
+  importOpen.value = false;
+}
 
 type Payment = {
   id: string
@@ -224,17 +291,17 @@ function getRowItems(row: Row<Payment>) {
 const category = ref([])
 
 const categories = ref([
-    {
-        label: '30K',
-        value: '1',
-    },
-    {
-        label: '50K',
-        value: '2',
-    },
-    {
-        label: '80K',
-        value: '3',
-    }
+  {
+    label: '30K',
+    value: '1',
+  },
+  {
+    label: '50K',
+    value: '2',
+  },
+  {
+    label: '80K',
+    value: '3',
+  }
 ])
 </script>

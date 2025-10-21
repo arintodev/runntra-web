@@ -36,12 +36,11 @@
 <script setup lang="ts">
 const route = useRoute();
 
-const { events, fetchEvents } = useOrganizerEvents()
+const eventStore = useEventStore()
+const { events } = storeToRefs(eventStore)
 
 onMounted(() => {
-	fetchEvents({
-		orgId: route.params.orgId as string
-	})
+	eventStore.fetchEvents()
 })
 
 definePageMeta({

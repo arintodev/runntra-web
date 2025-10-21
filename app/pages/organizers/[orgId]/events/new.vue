@@ -88,7 +88,8 @@ async function submit() {
         name: state.name,
         location: state.location,
         start_date: state.start_date,
-        end_date: state.end_date
+        end_date: state.end_date,
+        tenant_id: route.params.orgId
     })
     .select('id')
     .single()

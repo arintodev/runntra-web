@@ -2,7 +2,7 @@
 	<div class="w-full min-h-full flex flex-col items-stretch">
 		<UContainer class="pt-8">
 			<div>
-				<h2 class="text-2xl">Organizers</h2>
+				<h2 class="text-2xl">Your organizations</h2>
 			</div>
 			<div class="pt-8">
 				<div class="flex justify-between mb-4">
@@ -38,9 +38,10 @@ definePageMeta({
 	layout: 'dashboard'
 })
 
-const { organizers, isLoading: isLoadingOrg, fetchOrganizers } = useOrganizers()
+const organizerStore = useOrganizerStore()
+const { organizers } = storeToRefs(organizerStore)
 
 onMounted(() => {
-	fetchOrganizers()
+	organizerStore.fetchOrganizers()
 })
 </script>

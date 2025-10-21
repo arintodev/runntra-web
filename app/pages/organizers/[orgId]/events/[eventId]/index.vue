@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 definePageMeta({
-	layout: 'event'
+	layout: 'organizer'
 })
 
 const eventStore = useEventDetailStore();

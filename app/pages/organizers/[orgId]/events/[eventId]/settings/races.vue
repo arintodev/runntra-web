@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-6">
-    <UCard v-for="(item, index) in raceStore.eventRaces" :key="item.id" :title="item.name">
+    <UCard v-for="(item, index) in races" :key="item.id" :title="item.name">
       <template #header>
         <div>
           <span class="text-primary">{{ item.name }}</span>
@@ -20,7 +20,7 @@
               </template>
             </UInput>
           </UFormField>
-          <RaceForm :race="item" :ref="el => raceFormRefs[index] = el" @save="onRaceFormSave" />
+          <RaceForm :race="item" :ref="(el: any) => raceFormRefs[index] = el" @save="onRaceFormSave" />
           <div class="flex justify-end gap-3 mt-2">
             <UButton size="sm" label="Cancel" color="neutral" variant="outline"
               @click="raceFormRefs[index]?.cancel()" />
@@ -36,40 +36,12 @@
         </div>
       </div>
       <div class="w-full overflow-x-auto py-8 rounded-lg bg-elevated">
-        <CustomStepper orientation="horizontal" :items="items" class="w-full" @select="updateCheckpoint">
-          <template #description="{ item }">
-            <div class="text-sm rounded-lg mt-2 p-2 bg-default flex flex-col gap-1 m-w-64">
-              <div>
-                <div class="text-muted">Segment</div>
-                <div>2</div>
-              </div>
-              <div>
-                <div class="text-muted">Cut off point</div>
-                <div class="flex items-center gap-4 justify-center mt-1">
-                  <div class="flex items-center gap-2">
-                    <UIcon name="i-lucide-mars" />
-                    <span>4h</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <UIcon name="i-lucide-venus" />
-                    <span>4h</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="text-sm rounded-lg mt-2 p-2 bg-default flex flex-col gap-1">
-              <div class="flex items-center gap-3 justify-center text-nowrap">
-                <UIcon size="md" name="i-lucide-computer" />
-                D0-122-3232
-              </div>
-            </div>
-          </template>
-        </CustomStepper>
+        <CheckpointStepper orientation="horizontal" :items="item.checkpoints || []" class="w-full" @select="updateCheckpoint" />
       </div>
     </UCard>
-    <UModal v-model:open="modalOpen" :dismissible="false" title="Checkpoint">
+    <UModal v-model:open="modalOpen" :dismissible="false" title="Checkpoint" @update:open="modalStateUpdate">
       <template #body>
-        <CheckpointForm ref="checkpointForm" @save="submit" @cancel="cancel" />
+        <CheckpointForm ref="checkpointForm" :data="activeCp" @save="submit" @cancel="cancel" />
       </template>
       <template #footer>
         <div class="flex justify-between w-full">
@@ -86,66 +58,58 @@
 </template>
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
+import type { checkpointFormData } from '~/components/CheckpointForm.vue'
+import type { Checkpoint } from '~/types/race'
 
 const modalOpen = ref(false)
 const checkpointFormRef = useTemplateRef('checkpointForm')
 const { copy, copied } = useClipboard()
-
-const raceStore = useEventRaceStore()
+const route = useRoute()
+const raceStore = useRaceStore();
+const { races } = storeToRefs(raceStore)
 const raceFormRefs = ref<any>([])
 
-const supabase = useSupabaseClient()
+const activeCp = ref();
 
 function addCheckpoint(raceId: string) {
+  activeCp.value = {
+    race_id: raceId
+  }
   modalOpen.value = true;
 }
 
-function updateCheckpoint() {
+function updateCheckpoint(value: Checkpoint | undefined) {
+  if (! value) return;
+
+  activeCp.value = {
+    ...value,
+    devices: value.devices?.map(d => ({ value: d.id, label: d.code }))
+  };
   modalOpen.value = true;
 }
 
 function cancel() {
   modalOpen.value = false;
+  activeCp.value = undefined;
 }
 
-async function submit(data: any) {
-  const { data: checkpoint, error } = await supabase
-    .from('race_checkpoints')
-    .insert([data])
+function modalStateUpdate(value: boolean) {
+  activeCp.value = undefined;
+}
+
+async function submit(data: checkpointFormData) {
+  await raceStore.saveCheckpoint({
+    ...data,
+    event_id: route.params.eventId as string
+  })
+
   modalOpen.value = false;
+  activeCp.value = undefined;
 }
 
 function onRaceFormSave(data: any) {
-  raceStore.updateEventRace(data?.id, data)
+  raceStore.updateRace(data)
 }
 
-const items = ref<any[]>([
-  {
-    label: '01',
-    title: 'Start Line',
-    description: 'Kicked off the project with team alignment.',
-    icon: 'i-lucide-rocket',
-    active: true
-  },
-  {
-    label: '02',
-    title: 'Cemoro Kandang',
-    description: 'User research and design workshops.',
-    icon: 'i-lucide-map-pin'
-  },
-  {
-    label: '03',
-    title: 'Puncak Lawu',
-    description: 'Frontend and backend development.',
-    icon: 'i-lucide-map-pin',
-    active: true
-  },
-  {
-    label: '04',
-    title: 'Finsih Line',
-    description: 'QA testing and performance optimization.',
-    icon: 'i-lucide-flag',
-    active: true
-  }
-])
+
 </script>

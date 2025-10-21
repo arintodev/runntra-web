@@ -18,7 +18,7 @@ export const useOrganizers = () => {
 
     try {
       const { data, error: supabaseError } = await supabase
-        .from('organizers')
+        .from('organizations')
         .select()
 
       if (supabaseError) {

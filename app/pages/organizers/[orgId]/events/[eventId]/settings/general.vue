@@ -43,7 +43,7 @@
 </template>
 <script setup lang="ts">
 definePageMeta({
-    layout: 'event'
+    layout: 'organizer'
 })
 
 import { useClipboard } from '@vueuse/core'

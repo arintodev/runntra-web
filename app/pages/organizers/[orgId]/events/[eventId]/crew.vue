@@ -20,7 +20,7 @@
 </template>
 <script setup lang="ts">
 definePageMeta({
-	layout: 'event'
+	layout: 'organizer'
 })
 
 import type { TableColumn } from '@nuxt/ui'

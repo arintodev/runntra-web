@@ -5,9 +5,6 @@
             <UFormField label="Name" name="name" required>
                 <UInput placeholder="Race name" class="w-full" v-model="state.name" />
             </UFormField>
-            <UFormField label="Flag off" name="flag_off" required>
-                <DateTimeInput class="w-full" v-model="state.flag_off" show-time format="MMM D, YYYY HH:mm:ss"/>
-            </UFormField>
             <div class="grid grid-cols-2 gap-4">
                 <UFormField label="Distance" name="distance" required>
                     <UInput placeholder="Distance" class="w-full" v-model="state.distance" type="number">
@@ -24,6 +21,9 @@
                     </UInput>
                 </UFormField>
             </div>
+            <UFormField label="Flag off" name="flag_off" required>
+                <DateTimeInput class="w-full" v-model="state.flag_off" show-time format="MMM D, YYYY HH:mm:ss"/>
+            </UFormField>
             <UFormField label="Race Type" name="race_type" required>
                 <USelect :items="raceTypes" class="w-full" v-model="state.race_type" placeholder="Select race type" />
             </UFormField>

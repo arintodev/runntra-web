@@ -4,7 +4,7 @@ export interface Race {
   race_type: string
   flag_off: string | null
   distance: number | null
-  elevation: number | null
+  elevation_gain: number | null
   loop_target: string | null
   loop_duration: number | null
   loop_count: number | null
@@ -27,7 +27,7 @@ export interface Checkpoint {
   cop_female?: number | null
   is_result?: boolean
   distance?: number | null
-  elevation?: number | null
+  elevation_gain?: number | null
   event_id?: string
   created_at?: string
   updated_at?: string

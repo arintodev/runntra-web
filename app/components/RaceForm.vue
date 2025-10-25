@@ -13,8 +13,8 @@
                         </template>
                     </UInput>
                 </UFormField>
-                <UFormField label="Elevation" name="elevation">
-                    <UInput placeholder="Elevation" class="w-full" v-model="state.elevation" type="number">
+                <UFormField label="Elevation gain" name="elevation_gain">
+                    <UInput placeholder="Elevation gain" class="w-full" v-model="state.elevation_gain" type="number">
                         <template #trailing>
                             <span>m</span>
                         </template>
@@ -67,7 +67,7 @@ interface RaceFormData {
     race_type: string
     distance: number | null
     flag_off: string | null
-    elevation: number | null
+    elevation_gain: number | null
     loop_target: any
     loop_count: number | null
     loop_duration: number | null
@@ -99,7 +99,7 @@ const schema = z.object({
     flag_off: z.string().nullable(),
     race_type: z.string(),
     distance: z.number().min(0, 'Distance must be positive').nullable(),
-    elevation: z.number().nullable(),
+    elevation_gain: z.number().nullable(),
     loop_target: z.string().nullable(),
     loop_count: z.number().nullable(),
     loop_duration: z.number().nullable(),
@@ -142,7 +142,7 @@ const state = reactive<RaceFormData>({
     flag_off: props.race?.flag_off || new Date().toISOString(),
     race_type: props.race?.race_type || 'Standard',
     distance: props.race?.distance ? Number(props.race.distance) : null,
-    elevation: props.race?.elevation ? Number(props.race.elevation) : null,
+    elevation_gain: props.race?.elevation_gain ? Number(props.race.elevation_gain) : null,
     loop_target: props.race?.loop_target || null,
     loop_count: props.race?.loop_count || null,
     loop_duration: props.race?.loop_duration || null,

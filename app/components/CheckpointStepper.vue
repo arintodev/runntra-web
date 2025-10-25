@@ -18,14 +18,14 @@
             {{ item.name }}
           </div>
           <div class="text-sm rounded-lg mt-2 p-4 bg-default flex flex-col gap-1 m-w-64">
-              <div v-if="item.distance || item.segment || item.elevation" class="flex justify-center gap-3 mb-2">
+              <div v-if="item.distance || item.segment || item.elevation_gain" class="flex justify-center gap-3 mb-2">
                 <div v-if="item.distance" class="flex gap-1 items-center">
                   <UIcon name="i-lucide-ruler-dimension-line" class="text-muted" />
                   <span>{{ item.distance }}</span>
                 </div>
-                <div v-if="item.elevation" class="flex gap-1 items-center" >
+                <div v-if="item.elevation_gain" class="flex gap-1 items-center" >
                   <UIcon name="i-lucide-trending-up" class="text-muted"/>
-                  <span>{{ item.elevation }}</span>
+                  <span>{{ item.elevation_gain }}</span>
                 </div>
                 <div v-if="item.segment" class="flex gap-1 items-center" >
                   <UIcon name="i-lucide-flag" class="text-muted"/>

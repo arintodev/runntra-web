@@ -43,7 +43,7 @@ export const useRaceStore = defineStore('event-races', {
           .insert({
             name: payload.name,
             distance: payload.distance,
-            elevation: payload.elevation,
+            elevation_gain: payload.elevation_gain,
             flag_off: payload.flag_off,
             race_type: payload.race_type,
             loop_target: payload.loop_target,
@@ -192,7 +192,7 @@ export const useRaceStore = defineStore('event-races', {
               cop_female: payload.cop_female,
               is_result: payload.is_result,
               distance: payload.distance,
-              elevation: payload.elevation
+              elevation_gain: payload.elevation_gain
             })
             .eq('id', payload.id)
             .select()
@@ -264,7 +264,7 @@ export const useRaceStore = defineStore('event-races', {
               cop_female: payload.cop_female,
               is_result: payload.is_result,
               distance: payload.distance,
-              elevation: payload.elevation
+              elevation_gain: payload.elevation_gain
             })
             .select()
             .single()

@@ -18,8 +18,8 @@
             </template>
           </UInput>
         </UFormField>
-        <UFormField label="Elevation" name="elevation" required>
-          <UInput placeholder="Elevation" class="w-full" v-model="state.elevation" type="number">
+        <UFormField label="Elevation gain" name="elevation_gain" required>
+          <UInput placeholder="Elevation gain" class="w-full" v-model="state.elevation_gain" type="number">
             <template #trailing>
               <span>m</span>
             </template>
@@ -74,7 +74,7 @@ export interface checkpointFormData {
   cop_male?: number | null
   cop_female?: number | null
   distance?: number | null
-  elevation?: number | null
+  elevation_gain?: number | null
   segment?: number | null
   devices?: Array<any>,
   is_result?: boolean
@@ -113,7 +113,7 @@ const state = reactive<checkpointFormData>({
   cop_male: props.data?.cop_male ? Number(props.data.cop_male) : null,
   cop_female: props.data?.cop_female ? Number(props.data.cop_female) : null,
   segment: props.data?.segment ? Number(props.data?.segment) : null,
-  elevation: props.data?.elevation ? Number(props.data?.elevation) : null,
+  elevation_gain: props.data?.elevation_gain ? Number(props.data?.elevation_gain) : null,
   distance: props.data?.distance ? Number(props.data?.distance) : null,
   is_result: props.data?.is_result || true,
   devices: props.data?.devices || []

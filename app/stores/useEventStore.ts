@@ -34,8 +34,8 @@ state: (): EventState => ({
   },
 
   actions: {
-    setActiveEvent(org: Event) {
-      this.activeEvent = {...org}
+    setActiveEvent(event: Event) {
+      this.activeEvent = {...event}
     },
 
     async fetchEvents() {
